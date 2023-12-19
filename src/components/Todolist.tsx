@@ -1,6 +1,6 @@
 import React from 'react';
 
-type TaskType = {
+export type TaskType = {
   id: number;
   title: string;
   isDone: boolean;
@@ -13,7 +13,7 @@ type PropsType = {
 
 export const Todolist = (props: PropsType) => {
   return (
-    <div>
+    <div className="todoList">
       <h3>{props.title}</h3>
       <div>
         <input />
