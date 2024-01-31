@@ -1,7 +1,9 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { FilterValuesType } from './App';
+import { AddItemForm } from './components/AddItemForm/AddItemForm';
+import { EditableSpan } from './components/EditableSpan/EditableSpan';
 
-type TaskType = {
+export type TaskType = {
   id: string;
   title: string;
   isDone: boolean;
@@ -9,71 +11,51 @@ type TaskType = {
 
 type PropsType = {
   title: string;
+  id: string;
   tasks: Array<TaskType>;
-  addTask: (title: string) => void;
-  removeTask: (taskId: string) => void;
-  changeFilter: (value: FilterValuesType) => void;
-  changeStatus: (taskId: string, isDone: boolean) => void;
+  removeTask: (taskId: string, todolistId: string) => void;
+  changeFilter: (value: FilterValuesType, todolistId: string) => void;
+  addTask: (title: string, todolistId: string) => void;
+  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void;
   filter: FilterValuesType;
+  removeTodolist: (id: string) => void;
+  updateTask: (todolistId: string, taskId: string, title: string) => void;
 };
 
 export function Todolist(props: PropsType) {
-  const [title, setTitle] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const onAllClickHandler = () => props.changeFilter('all', props.id);
+  const onActiveClickHandler = () => props.changeFilter('active', props.id);
+  const onCompletedClickHandler = () => props.changeFilter('completed', props.id);
 
-  const addTask = () => {
-    if (title.trim() !== '') {
-      props.addTask(title.trim());
-      setTitle('');
-    } else {
-      setError('Title is required');
-    }
-  };
+  const removeTodolistHandler = () => props.removeTodolist(props.id);
 
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.currentTarget.value);
-  };
-
-  const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    setError(null);
-    if (event.key === 'Enter') {
-      addTask();
-    }
-  };
-
-  const onAllClickHandler = () => {
-    props.changeFilter('all');
-  };
-  const onActiveClickHandler = () => {
-    props.changeFilter('active');
-  };
-  const onCompletedClickHandler = () => {
-    props.changeFilter('completed');
+  const addTaskHandler = (title: string) => {
+    props.addTask(title, props.id);
   };
 
   return (
     <div>
-      <h3>{props.title}</h3>
-      <div>
-        <input
-          value={title}
-          onChange={onChangeHandler}
-          onKeyPress={onKeyPressHandler}
-          className={error ? 'error' : ''}
-        />
-        <button onClick={addTask}>+</button>
-        {error && <div className="error-message">{error}</div>}
-      </div>
+      <h3>
+        {props.title}
+        <button onClick={removeTodolistHandler}>x</button>
+      </h3>
+      <AddItemForm callback={addTaskHandler} />
       <ul>
-        {props.tasks.map((task) => {
-          const onClickHandler = () => props.removeTask(task.id);
+        {props.tasks.map((t) => {
+          const onClickHandler = () => props.removeTask(t.id, props.id);
           const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(task.id, e.currentTarget.checked);
+            props.changeTaskStatus(t.id, e.currentTarget.checked, props.id);
           };
+
+          const updateTaskHandler = (title: string) => {
+            props.updateTask(props.id, t.id, title);
+          };
+
           return (
-            <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-              <input type="checkbox" onChange={onChangeHandler} checked={task.isDone} />
-              <span>{task.title}</span>
+            <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+              <input type="checkbox" onChange={onChangeHandler} checked={t.isDone} />
+              {/* <span>{t.title}</span> */}
+              <EditableSpan oldTitle={t.title} callback={updateTaskHandler} />
               <button onClick={onClickHandler}>x</button>
             </li>
           );
