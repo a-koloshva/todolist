@@ -90,6 +90,12 @@ function App() {
     });
   };
 
+  const updateTodolist = (todolistId: string, title: string) => {
+    setTodolists(
+      todolists.map((todolist) => (todolist.id === todolistId ? { ...todolist, title } : todolist)),
+    );
+  };
+
   return (
     <div className="App">
       <AddItemForm callback={addTodolist} />
@@ -117,6 +123,7 @@ function App() {
             filter={todolist.filter}
             removeTodolist={removeTodolist}
             updateTask={updateTask}
+            updateTodolist={updateTodolist}
           />
         );
       })}
