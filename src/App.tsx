@@ -37,35 +37,47 @@ function App() {
   });
 
   function removeTask(id: string, todolistId: string) {
-    let todolistTasks = tasks[todolistId];
-    tasks[todolistId] = todolistTasks.filter((task) => task.id !== id);
-    setTasks({ ...tasks });
+    // let todolistTasks = tasks[todolistId];
+    // tasks[todolistId] = todolistTasks.filter((task) => task.id !== id);
+    // setTasks({ ...tasks });
+
+    setTasks({ ...tasks, [todolistId]: tasks[todolistId].filter((task) => task.id !== id) });
   }
 
   function addTask(title: string, todolistId: string) {
     let task = { id: v1(), title: title, isDone: false };
 
-    let todolistTasks = tasks[todolistId];
-    tasks[todolistId] = [task, ...todolistTasks];
-    setTasks({ ...tasks });
+    // let todolistTasks = tasks[todolistId];
+    // tasks[todolistId] = [task, ...todolistTasks];
+    // setTasks({ ...tasks });
+
+    setTasks({ ...tasks, [todolistId]: [task, ...tasks[todolistId]] });
   }
 
   function changeStatus(id: string, isDone: boolean, todolistId: string) {
-    let todolistTasks = tasks[todolistId];
-    let task = todolistTasks.find((task) => task.id === id);
-
-    if (task) {
-      task.isDone = isDone;
-      setTasks({ ...tasks });
-    }
+    // let todolistTasks = tasks[todolistId];
+    // let task = todolistTasks.find((task) => task.id === id);
+    // if (task) {
+    //   task.isDone = isDone;
+    //   setTasks({ ...tasks });
+    // }
+    setTasks({
+      ...tasks,
+      [todolistId]: tasks[todolistId].map((task) => (task.id === id ? { ...task, isDone } : task)),
+    });
   }
 
   function changeFilter(value: FilterValuesType, todolistId: string) {
-    let todolist = todolists.find((tl) => tl.id === todolistId);
-    if (todolist) {
-      todolist.filter = value;
-      setTodolists([...todolists]);
-    }
+    // let todolist = todolists.find((tl) => tl.id === todolistId);
+    // if (todolist) {
+    //   todolist.filter = value;
+    //   setTodolists([...todolists]);
+    // }
+    setTodolists(
+      [...todolists].map((todolist) =>
+        todolist.id === todolistId ? { ...todolist, filter: value } : todolist,
+      ),
+    );
   }
 
   function removeTodolist(id: string) {
