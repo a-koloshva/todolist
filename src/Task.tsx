@@ -2,9 +2,9 @@ import { Checkbox, IconButton } from '@mui/material';
 import React, { ChangeEvent, useCallback } from 'react';
 import { EditableSpan } from './EditableSpan';
 import { Delete } from '@mui/icons-material';
-import { TaskType } from './Todolist';
 import { useDispatch } from 'react-redux';
 import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './state/tasks-reducer';
+import { TaskStatuses, TaskType } from './api/task-api';
 
 type TaskPropsType = {
     t: TaskType;
@@ -20,7 +20,13 @@ export const Task = (props: TaskPropsType) => {
     const onChangeHandler = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
             let newIsDoneValue = e.currentTarget.checked;
-            dispatch(changeTaskStatusAC(props.t.id, newIsDoneValue, props.id));
+            dispatch(
+                changeTaskStatusAC(
+                    props.t.id,
+                    newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New,
+                    props.id,
+                ),
+            );
         },
         [props.t.id, props.id],
     );
@@ -32,8 +38,14 @@ export const Task = (props: TaskPropsType) => {
     );
 
     return (
-        <div key={props.t.id} className={props.t.isDone ? 'is-done' : ''}>
-            <Checkbox checked={props.t.isDone} color="primary" onChange={onChangeHandler} />
+        <div
+            key={props.t.id}
+            className={props.t.status === TaskStatuses.Completed ? 'is-done' : ''}>
+            <Checkbox
+                checked={props.t.status === TaskStatuses.Completed}
+                color="primary"
+                onChange={onChangeHandler}
+            />
             <EditableSpan value={props.t.title} onChange={onTitleChangeHandler} />
             <IconButton onClick={onClickHandler}>
                 <Delete />
