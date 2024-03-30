@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { taskAPI } from '../api/task-api';
+import { todolistsAPI } from '../api/todolist-api';
 
 export default {
     title: 'API',
@@ -10,7 +10,7 @@ export const GetTasks = () => {
     const [todolistId, setTodolistId] = useState<string>('');
 
     const getTasks = () => {
-        taskAPI.getTasks(todolistId).then((res) => {
+        todolistsAPI.getTasks(todolistId).then((res) => {
             setState(res.data);
         });
     };
@@ -38,7 +38,7 @@ export const CreateTask = () => {
     const [title, setTitle] = useState<string>('');
 
     const createTask = () => {
-        taskAPI.createTask(todolistId, title).then((res) => {
+        todolistsAPI.createTask(todolistId, title).then((res) => {
             setState(res.data);
         });
     };
@@ -73,7 +73,7 @@ export const DeleteTask = () => {
     const [taskId, setTaskId] = useState<string>('');
 
     const deleteTask = () => {
-        taskAPI.deleteTask(todolistId, taskId).then((res) => {
+        todolistsAPI.deleteTask(todolistId, taskId).then((res) => {
             setState(res.data);
         });
     };
@@ -114,7 +114,7 @@ export const UpdateTaskTitle = () => {
     const [deadline, setDeadline] = useState<string>('');
 
     const updateTaskTitle = () => {
-        taskAPI
+        todolistsAPI
             .updateTask(todolistId, taskId, {
                 deadline: '',
                 description: description,
