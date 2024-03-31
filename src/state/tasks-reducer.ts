@@ -27,9 +27,10 @@ export const tasksReducer = (
                 [action.todolistId]: state[action.todolistId].filter((t) => t.id !== action.taskId),
             };
         case 'ADD-TASK':
+            console.log(action);
             return {
                 ...state,
-                [action.task.todolistId]: [action.task, ...state[action.task.todolistId]],
+                [action.task.todoListId]: [action.task, ...state[action.task.todoListId]],
             };
         case 'UPDATE-TASK':
             return {

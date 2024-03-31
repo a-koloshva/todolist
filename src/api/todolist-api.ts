@@ -85,7 +85,7 @@ export type TaskType = {
     startDate: string;
     deadline: string;
     id: string;
-    todolistId: string;
+    todoListId: string;
     order: number;
     addedDate: string;
 };
