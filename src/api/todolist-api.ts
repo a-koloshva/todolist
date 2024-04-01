@@ -8,6 +8,7 @@ const instance = axios.create({
     },
 });
 
+//api
 export const todolistsAPI = {
     getTodolists() {
         return instance.get<TodolistType[]>('todo-lists');
@@ -50,12 +51,14 @@ export const todolistsAPI = {
     },
 };
 
+//types
 export type TodolistType = {
     id: string;
     title: string;
     addedDate: string;
     order: number;
 };
+
 export type ResponseType<D = {}> = {
     resultCode: number;
     messages: Array<string>;
@@ -69,6 +72,7 @@ export enum TaskStatuses {
     Completed = 2,
     Draft = 3,
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,

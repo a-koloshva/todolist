@@ -4,8 +4,8 @@ import {
     TaskType,
     UpdateTaskModelType,
     todolistsAPI,
-} from '../api/todolist-api';
-import { AppRootStateType } from './store';
+} from '../../api/todolist-api';
+import { AppRootStateType } from '../../app/store';
 import {
     AddTodolistActionType,
     RemoveTodolistActionType,
@@ -27,7 +27,6 @@ export const tasksReducer = (
                 [action.todolistId]: state[action.todolistId].filter((t) => t.id !== action.taskId),
             };
         case 'ADD-TASK':
-            console.log(action);
             return {
                 ...state,
                 [action.task.todoListId]: [action.task, ...state[action.task.todoListId]],
@@ -82,6 +81,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
         dispatch(action);
     });
 };
+
 export const removeTaskTC =
     (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.deleteTask(todolistId, taskId).then((res) => {
@@ -89,6 +89,7 @@ export const removeTaskTC =
             dispatch(action);
         });
     };
+
 export const addTaskTC =
     (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.createTask(todolistId, title).then((res) => {
@@ -97,6 +98,7 @@ export const addTaskTC =
             dispatch(action);
         });
     };
+
 export const updateTaskTC =
     (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
@@ -133,9 +135,11 @@ export type UpdateDomainTaskModelType = {
     startDate?: string;
     deadline?: string;
 };
+
 export type TasksStateType = {
     [key: string]: Array<TaskType>;
 };
+
 type ActionsType =
     | ReturnType<typeof removeTaskAC>
     | ReturnType<typeof addTaskAC>

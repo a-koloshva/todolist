@@ -47,7 +47,10 @@
             "react-app",
             "react-app/jest",
             "plugin:storybook/recommended"
-        ]
+        ],
+        "rules": {
+            "jsx-a11y/anchor-is-valid": "off"
+        }
     },
     "browserslist": {
         "production": [
@@ -60,6 +63,11 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "jest": {
+        "moduleNameMapper": {
+            "axios": "axios/dist/node/axios.cjs"
+        }
     },
     "devDependencies": {
         "@chromatic-com/storybook": "1.2.25",

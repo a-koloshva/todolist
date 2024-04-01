@@ -1,8 +1,8 @@
 import { AnyAction, applyMiddleware, combineReducers, createStore } from 'redux';
 import thunkMiddleware, { ThunkDispatch } from 'redux-thunk';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { tasksReducer } from './tasks-reducer';
-import { todolistsReducer } from './todolists-reducer';
+import { tasksReducer } from '../features/TodolistsList/tasks-reducer';
+import { todolistsReducer } from '../features/TodolistsList/todolists-reducer';
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния

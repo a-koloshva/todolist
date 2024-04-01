@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 // import './App.css';
 // import { Todolist } from './Todolist';
 // import { v1 } from 'uuid';
@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 //     [key: string]: Array<TaskType>;
 // };
 
-function App() {
+function AppOld() {
     //     let todolistId1 = v1();
     //     let todolistId2 = v1();
 
@@ -235,4 +235,4 @@ function App() {
     );
 }
 
-export default App;
+export default AppOld;
