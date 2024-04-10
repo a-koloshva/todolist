@@ -3,12 +3,14 @@ import thunkMiddleware, { ThunkDispatch } from 'redux-thunk';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { tasksReducer } from '../features/TodolistsList/tasks-reducer';
 import { todolistsReducer } from '../features/TodolistsList/todolists-reducer';
+import { appReducer } from './app-reducer';
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
+    app: appReducer,
 });
 // непосредственно создаём store
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

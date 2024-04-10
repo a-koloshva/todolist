@@ -5,6 +5,12 @@ import {
     UpdateTaskModelType,
     todolistsAPI,
 } from '../../api/todolist-api';
+import {
+    SetErrorActionType,
+    SetStatusActionType,
+    setErrorAC,
+    setStatusAC,
+} from '../../app/app-reducer';
 import { AppRootStateType } from '../../app/store';
 import {
     AddTodolistActionType,
@@ -74,28 +80,38 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
     ({ type: 'SET-TASKS', tasks, todolistId }) as const;
 
 // thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
-    todolistsAPI.getTasks(todolistId).then((res) => {
-        const tasks = res.data.items;
-        const action = setTasksAC(tasks, todolistId);
-        dispatch(action);
-    });
-};
+export const fetchTasksTC =
+    (todolistId: string) => (dispatch: Dispatch<ActionsType | SetStatusActionType>) => {
+        dispatch(setStatusAC('loading'));
+        todolistsAPI.getTasks(todolistId).then((res) => {
+            dispatch(setTasksAC(res.data.items, todolistId));
+            dispatch(setStatusAC('succeeded'));
+        });
+    };
 
 export const removeTaskTC =
     (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.deleteTask(todolistId, taskId).then((res) => {
-            const action = removeTaskAC(taskId, todolistId);
-            dispatch(action);
+            dispatch(removeTaskAC(taskId, todolistId));
         });
     };
 
 export const addTaskTC =
-    (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+    (title: string, todolistId: string) =>
+    (dispatch: Dispatch<ActionsType | SetErrorActionType | SetStatusActionType>) => {
+        dispatch(setStatusAC('loading'));
         todolistsAPI.createTask(todolistId, title).then((res) => {
-            const task = res.data.data.item;
-            const action = addTaskAC(task);
-            dispatch(action);
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item));
+                dispatch(setStatusAC('succeeded'));
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setErrorAC(res.data.messages[0]));
+                } else {
+                    dispatch(setErrorAC('Some error...'));
+                }
+                dispatch(setStatusAC('failed'));
+            }
         });
     };
 
@@ -121,8 +137,7 @@ export const updateTaskTC =
         };
 
         todolistsAPI.updateTask(todolistId, taskId, apiModel).then((res) => {
-            const action = updateTaskAC(taskId, domainModel, todolistId);
-            dispatch(action);
+            dispatch(updateTaskAC(taskId, domainModel, todolistId));
         });
     };
 
