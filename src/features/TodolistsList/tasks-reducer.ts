@@ -8,8 +8,8 @@ import {
 import {
     SetErrorActionType,
     SetStatusActionType,
-    setErrorAC,
-    setStatusAC,
+    setAppErrorAC,
+    setAppStatusAC,
 } from '../../app/app-reducer';
 import { AppRootStateType } from '../../app/store';
 import {
@@ -82,10 +82,10 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
 // thunks
 export const fetchTasksTC =
     (todolistId: string) => (dispatch: Dispatch<ActionsType | SetStatusActionType>) => {
-        dispatch(setStatusAC('loading'));
+        dispatch(setAppStatusAC('loading'));
         todolistsAPI.getTasks(todolistId).then((res) => {
             dispatch(setTasksAC(res.data.items, todolistId));
-            dispatch(setStatusAC('succeeded'));
+            dispatch(setAppStatusAC('succeeded'));
         });
     };
 
@@ -99,18 +99,18 @@ export const removeTaskTC =
 export const addTaskTC =
     (title: string, todolistId: string) =>
     (dispatch: Dispatch<ActionsType | SetErrorActionType | SetStatusActionType>) => {
-        dispatch(setStatusAC('loading'));
+        dispatch(setAppStatusAC('loading'));
         todolistsAPI.createTask(todolistId, title).then((res) => {
             if (res.data.resultCode === 0) {
                 dispatch(addTaskAC(res.data.data.item));
-                dispatch(setStatusAC('succeeded'));
+                dispatch(setAppStatusAC('succeeded'));
             } else {
                 if (res.data.messages.length) {
-                    dispatch(setErrorAC(res.data.messages[0]));
+                    dispatch(setAppErrorAC(res.data.messages[0]));
                 } else {
-                    dispatch(setErrorAC('Some error...'));
+                    dispatch(setAppErrorAC('Some error...'));
                 }
-                dispatch(setStatusAC('failed'));
+                dispatch(setAppStatusAC('failed'));
             }
         });
     };
