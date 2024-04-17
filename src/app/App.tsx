@@ -13,7 +13,7 @@ import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar';
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDispatch } from './store';
 import { RequestStatusType, initializeAppTC } from './app-reducer';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Login } from '../features/Login/Login';
 import { logoutTC } from '../features/Login/auth-reducer';
 
@@ -42,7 +42,7 @@ export function App() {
     };
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <div className="App">
                 <ErrorSnackbar />
                 <AppBar position="static">
@@ -74,6 +74,6 @@ export function App() {
                     </Routes>
                 </Container>
             </div>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
