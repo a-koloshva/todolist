@@ -15,17 +15,20 @@ import { TaskStatuses } from '../../api/todolist-api';
 import { AddItemForm } from '../../components/AddItemForm/AddItemForm';
 import { Grid, Paper } from '@mui/material';
 import { Todolist } from './Todolist/Todolist';
+import { Navigate } from 'react-router-dom';
 
 export const TodolistsList: React.FC = () => {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(
         (state) => state.todolists,
     );
     const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks);
-
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchTodolistsTC());
+        if (isLoggedIn) {
+            dispatch(fetchTodolistsTC());
+        }
     }, []);
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
@@ -67,6 +70,10 @@ export const TodolistsList: React.FC = () => {
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistTC(title));
     }, []);
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'} />;
+    }
 
     return (
         <>
